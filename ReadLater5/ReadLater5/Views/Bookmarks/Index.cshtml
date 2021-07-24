@@ -1,0 +1,102 @@
+﻿<div class="col-xl-3 col-sm-6 p-0">
+    <a href=@Url.Action("Create", "Bookmarks") class="btn btn-primary">Create</a>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table id="datatable">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>URL</th>
+                            <th>Short Description</th>
+                            <th>Category</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/css/bootstrap-select.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            bindDatatable();
+        });
+
+        $("#datatable").on("click", ".js-delete", function () {
+            var button = $(this);
+            bootbox.confirm("Are you sure you want to delete this bookmark?", function (result) {
+                if (result) {
+                    var url = '@Url.Action("Delete", "Bookmarks")';
+                    var id = button.attr("data-bookmark-id");
+                    debugger
+                    $.ajax({
+                        url: `${url}?id=${id}`,
+                        method: "GET",
+                        success: function () {
+                            button.parents("tr").remove();
+                        }
+                    })
+                }
+            })
+        })
+
+        function bindDatatable() {
+            datatable = $('#datatable')
+                .DataTable({
+                    lengthMenu: [5, 10, 25],
+                    serverSide: true,
+                    processing: true,
+                    bDestroy: true,
+                    dom: 'lBfrtip',
+                    ajax: {
+                        url: "/Bookmarks/GetBookmarks",
+                        dataType: "json",
+                        type: "GET",
+                        data: function (d) {
+                            if (d.search.value != '') {
+                                d.search = d.search.value;
+                            }
+                        }
+                    },
+                    columns: [{
+                        data: 'id'
+                    },
+                    {
+                        data: 'url'
+                    },
+                    {
+                        data: 'shortDescription'
+                    },
+                    {
+                        data: 'category.name',
+                    }],
+                    columnDefs: [{
+                        targets: [0],
+                        render: function (data, type, row, meta) {
+                            var url = '@Url.Action("Update", "Bookmarks")';
+                            return `<a class="bg-primary btn btn-block" style="color:white" href="${url}?id=${row.id}">Edit</td>`;
+                        },
+                    },
+                    {
+                        targets: [4],
+                        render: function (data, type, row, meta) {
+                            return `<button data-bookmark-id="${row.id}"class="bg-danger btn btn-block js-delete" style="color:white">Delete</button>`;
+                        },
+                    }]
+            });
+        }
+    </script>
+}

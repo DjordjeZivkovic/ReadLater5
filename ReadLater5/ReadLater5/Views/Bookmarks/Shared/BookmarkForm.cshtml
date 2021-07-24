@@ -1,0 +1,26 @@
+﻿@model ReadLater5.Application.Inputs.Commands.BookmarkCommands.BookmarkUpdateCommand
+
+<h4>Bookmark</h4>
+<hr />
+<div class="form-group">
+    @Html.LabelFor(x => x.Bookmark.URL)
+    @Html.TextBoxFor(x => x.Bookmark.URL, new { @class = "form-control" })
+    @Html.ValidationMessageFor(x => x.Bookmark.URL, String.Empty, new { @style = "color:#f46a6a" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(x => x.Bookmark.ShortDescription)
+    @Html.TextBoxFor(x => x.Bookmark.ShortDescription, new { @class = "form-control" })
+    @Html.ValidationMessageFor(x => x.Bookmark.ShortDescription, String.Empty, new { @style = "color:#f46a6a" })
+</div>
+<div class="form-group">
+    <label>Category</label>
+    <select class="form-control" id="selectCategoryId" name="Bookmark.CategoryId">
+        @if (Model != null && Model.Bookmark != null && Model.Bookmark.Category != null)
+        {
+            <option value="@Model.Bookmark.CategoryId" selected="selected">@Model.Bookmark.Category.Name</option>
+        }
+    </select>
+</div>
+<div class="float-right">
+    <button id="submit" type="submit" class="btn btn-primary w-md">Submit</button>
+</div>

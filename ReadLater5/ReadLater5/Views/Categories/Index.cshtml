@@ -1,34 +1,59 @@
-﻿@model IEnumerable<Entity.Category>
+﻿<div class="col-xl-3 col-sm-6 p-0">
+    <a href=@Url.Action("Create", "Categories") class="btn btn-primary">Create</a>
+</div>
 
-@{
-    ViewBag.Title = "Index";
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table id="datatable">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            bindDatatable();
+        });
+
+        function bindDatatable() {
+            datatable = $('#datatable')
+                .DataTable({
+                    lengthMenu: [5, 10, 25],
+                    serverSide: true,
+                    processing: true,
+                    bDestroy: true,
+                    dom: 'lBfrtip',
+                    ajax: {
+                        url: "/Categories/GetCategories",
+                        dataType: "json",
+                        type: "GET",
+                        data: function (d) {
+                            if (d.search.value != '') {
+                                d.search = d.search.value;
+                            }
+                        }
+                    },
+                    columns: [{
+                        data: 'id'
+                    },
+                    {
+                        data: 'name'
+                    }]
+            });
+        }
+    </script>
 }
-
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-            </td>
-        </tr>
-    }
-
-</table>

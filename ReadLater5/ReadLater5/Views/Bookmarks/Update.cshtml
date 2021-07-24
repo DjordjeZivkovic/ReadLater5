@@ -1,0 +1,61 @@
+﻿@model ReadLater5.Application.Inputs.Commands.BookmarkCommands.BookmarkUpdateCommand
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                @using (Html.BeginForm("Update", "Bookmarks", FormMethod.Post, new { id = "updateBookmarkForm", @class = "needs-validation", novalidate = true }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(x => x.Bookmark.Id)
+                    @await Html.PartialAsync("~/Views/Bookmarks/Shared/BookmarkForm.cshtml", Model)
+                }
+                @if (!string.IsNullOrEmpty(ViewBag.Success))
+                {
+                    <div style="color:green">@ViewBag.Success</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+        var urlCategories = '@Url.Action("GetCategories", "Categories")';
+            $('#selectCategoryId').select2({
+            ajax: {
+                url: urlCategories,
+                type: 'POST',
+                data: function (params) {
+                    var query = {
+                        length: 5,
+                        columns: [{
+                            data: 'name',
+                            search: {
+                                value: params.term || ''
+                            }
+                        }]
+                    }
+
+                    return query;
+                },
+                processResults: function (response) {
+                    return {
+                        results: response.data.map(item => {
+                            return {
+                                id: item.id,
+                                text: item.name
+                            }
+                        })
+                    }
+                }
+            }
+        });
+    });
+    </script>
+}
