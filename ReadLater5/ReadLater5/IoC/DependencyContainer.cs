@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using ReadLater5.Application.Inputs.Validators.BookmarkValidators;
 using ReadLater5.Application.Interfaces;
 using ReadLater5.Application.Services.BookmarkService;
+using ReadLater5.Domain.Models;
 using ReadLater5.Infrastructure.Persistance;
 using ReadLater5.Infrastructure.Security;
 using ReadLater5.Presentation.Filters;
@@ -29,10 +30,10 @@ namespace ReadLater5.Presentation.IoC
 
         public static IServiceCollection AddIdentityDependency(this IServiceCollection services)
         {
-            var builder = services.AddDefaultIdentity<IdentityUser>();
+            var builder = services.AddDefaultIdentity<AppUser>();
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
             identityBuilder.AddEntityFrameworkStores<ReadLaterDataContext>();
-
+            identityBuilder.AddSignInManager<SignInManager<AppUser>>();
             return services;
         }
 
@@ -67,7 +68,7 @@ namespace ReadLater5.Presentation.IoC
             return services;
         }
 
-        public static IServiceCollection AddSecurityDependency(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddAuthenticationDependency(this IServiceCollection services, IConfiguration configuration)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["TokenKey"]));
 
@@ -84,6 +85,15 @@ namespace ReadLater5.Presentation.IoC
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.Zero
                     };
+                })
+                .AddOpenIdConnect(options =>
+                {
+                    options.SignInScheme = IdentityConstants.ExternalScheme;
+                    options.Authority = configuration["GoogleOIDC:Domain"];
+                    options.ClientId = configuration["GoogleOIDC:ClientId"];
+                    options.ClientSecret = configuration["GoogleOIDC:ClientSecret"];
+                    options.RequireHttpsMetadata = false;
+                    options.SaveTokens = true;
                 });
 
             return services;

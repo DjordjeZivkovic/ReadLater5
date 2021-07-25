@@ -11,6 +11,7 @@ namespace ReadLater5.Presentation.Controllers
     {
         public IActionResult Index() => View();
 
+        [HttpGet]
         public async Task<IActionResult> GetCategories(int? start, int? length, string search, IEnumerable<ColumnDto> columns) =>
             Ok(await Mediator.Send(new CategoriesQuery { Start = start, Length = length, Search = search, Columns = columns }));
 

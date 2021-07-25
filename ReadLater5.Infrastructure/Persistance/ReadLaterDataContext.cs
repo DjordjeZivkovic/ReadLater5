@@ -4,12 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-using Microsoft.AspNetCore.Identity;
 using ReadLater5.Application.Interfaces;
 
 namespace ReadLater5.Infrastructure.Persistance
 {
-    public class ReadLaterDataContext : IdentityDbContext<IdentityUser>, IDataContext
+    public class ReadLaterDataContext : IdentityDbContext<AppUser>, IDataContext
 
     {
         public ReadLaterDataContext(DbContextOptions options) : base(options)

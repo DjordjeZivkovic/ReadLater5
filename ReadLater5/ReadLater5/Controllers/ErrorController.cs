@@ -6,7 +6,7 @@ namespace ReadLater5.Presentation.Controllers
     {
         [Route("/Error/Index")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Index() => View("404ErrorPage");
+        public IActionResult Index() => View();
 
         [Route("/Error/Index/{code}")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ReadLater5.Application.Inputs.Commands.BookmarkCommands;
 using ReadLater5.Application.Inputs.Queries.BookmarkQueries;
 using ReadLater5.Domain.Constants;
@@ -10,18 +8,17 @@ using System.Threading.Tasks;
 
 namespace ReadLater5.Presentation.Controllers
 {
-    //[Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class BookmarksController : BaseController
     {
         public IActionResult Index() => View();
 
+        [HttpGet]
         public async Task<IActionResult> GetBookmarks(int? start, int? length, string search, IEnumerable<ColumnDto> columns) =>
             Ok(await Mediator.Send(new BookmarksQuery { Start = start, Length = length, Search = search, Columns = columns }));
 
         public IActionResult Create() => View();
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookmarkCreateCommand command)
         {
             await Mediator.Send(command);
@@ -30,7 +27,7 @@ namespace ReadLater5.Presentation.Controllers
 
             return View();
         }
-
+        [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
             var bookmark = await Mediator.Send(new BookmarkQuery { Id = id });
@@ -39,7 +36,6 @@ namespace ReadLater5.Presentation.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(BookmarkUpdateCommand command)
         {
             command.Bookmark = await Mediator.Send(command);
@@ -48,7 +44,7 @@ namespace ReadLater5.Presentation.Controllers
 
             return View(command);
         }
-
+        [HttpGet]
         public async Task<IActionResult> Delete(int id) =>
             Ok(await Mediator.Send(new BookmarkDeleteCommand { Id = id }));
     }

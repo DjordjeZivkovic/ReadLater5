@@ -26,7 +26,7 @@ namespace ReadLater5
                 .AddAuthorizationDependency()
                 .AddServiceDependency(Configuration)
                 .AddContextDependency(Configuration)
-                .AddSecurityDependency(Configuration)
+                .AddAuthenticationDependency(Configuration)
                 .AddIdentityDependency();
         }
 

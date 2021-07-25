@@ -5,5 +5,6 @@ namespace ReadLater5.Application.Interfaces
     public interface IJwtGenerator
     {
         string CreateToken(IdentityUser user);
+        string GenerateRefreshToken();
     }
 }

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace ReadLater5.Presentation.Controllers.ApiControllers
 {
+    [ApiController]
     [Route("/api/bookmarks/")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ApiBookmarksController : BaseController
