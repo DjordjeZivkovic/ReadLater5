@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ReadLater5.Application.Inputs.Commands.CategoryCommands;
 using ReadLater5.Application.Inputs.Queries.CategoryQueries;
+using ReadLater5.Domain.Constants;
 using ReadLater5.Domain.Dtos;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,7 +19,13 @@ namespace ReadLater5.Presentation.Controllers
         public IActionResult Create() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Create(CategoryCreateCommand command) =>
-            Ok(await Mediator.Send(command));
+        public async Task<IActionResult> Create(CategoryCreateCommand command)
+        {
+            await Mediator.Send(command);
+
+            ViewBag.Success = Successes.SuccessfullyCreated;
+
+            return View();
+        }
     }
 }

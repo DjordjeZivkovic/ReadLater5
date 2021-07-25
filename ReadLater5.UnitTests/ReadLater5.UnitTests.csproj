@@ -22,8 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Entity\Entity\ReadLater5.Domain.csproj" />
-    <ProjectReference Include="..\Services\Services\ReadLater5.Application.csproj" />
+    <ProjectReference Include="..\ReadLater5.Application\ReadLater5.Application.csproj" />
   </ItemGroup>
 
 </Project>

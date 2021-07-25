@@ -26,6 +26,10 @@
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
+            @if (!string.IsNullOrEmpty(ViewBag.Success))
+            {
+                <div style="color:green">@ViewBag.Success</div>
+            }
         </div>
     </div>
 }
